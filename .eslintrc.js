@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   env: {
     node: true,
+    'vue/setup-compiler-macros': true // setup语法糖
   },
   extends: [
     "plugin:vue/vue3-essential",

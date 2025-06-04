@@ -1,11 +1,13 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
-  <a-checkbox v-model:checked="checked">Checkbox</a-checkbox>
+  <CheckboxGroup
+    :plain-options="fruitOptions"
+    :checked-list="defaultSelected"
+  />
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from "vue";
-const checked = ref(false);
+import CheckboxGroup from "@/components/SingleCheckBox.vue";
+const fruitOptions = ref(["Apple", "Pear", "Orange", "Banana", "Grape"]);
+const defaultSelected = ref(["Apple", "Orange"]);
 </script>
