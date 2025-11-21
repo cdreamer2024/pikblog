@@ -4,6 +4,11 @@ import Antd from "ant-design-vue";
 import "ant-design-vue/dist/reset.css";
 import "./registerServiceWorker";
 import router from "./router";
-import store from "./store";
+import "./assets/css/global.scss";
+import { createPinia } from "pinia";
+import piniaPersist from "pinia-plugin-persist";
 
-createApp(App).use(Antd).use(store).use(router).mount("#app");
+const pinia = createPinia();
+
+pinia.use(piniaPersist);
+createApp(App).use(Antd).use(pinia).use(router).mount("#app");
