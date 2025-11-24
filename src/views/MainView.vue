@@ -51,6 +51,7 @@
 import { computed, h, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import {
+  BarChartOutlined,
   HomeOutlined,
   WalletOutlined,
   MonitorOutlined,
@@ -92,7 +93,7 @@ const convertMenus = (menus: any[]): MenuProps["items"] => {
   if (!menus || !Array.isArray(menus)) return [];
 
   return menus.map((menu) => ({
-    key: `/main${menu.Path || menu.Id || menu.key}`, // 添加 /main 前缀
+    key: `/main${menu.Path || menu.Id || menu.key}`,
     icon: () => h(IconCom, { icon: menu.Icon }),
     label: menu.Name || menu.label,
     children: menu.Children ? convertMenus(menu.Children) : undefined,
@@ -105,6 +106,7 @@ const menuItems = computed<MenuProps["items"]>(() => {
     {
       key: "/main/desktop",
       icon: () => h(HomeOutlined),
+
       label: "我的主页",
       children: [
         {

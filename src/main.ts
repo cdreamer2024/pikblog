@@ -8,7 +8,14 @@ import "./assets/css/global.scss";
 import { createPinia } from "pinia";
 import piniaPersist from "pinia-plugin-persist";
 
-const pinia = createPinia();
+// 在开发环境下引入 mock
+if (process.env.NODE_ENV === "development") {
+  import("./mock").then((mock) => {
+    console.log("Mock.js 已加载");
+  });
+}
 
+const pinia = createPinia();
 pinia.use(piniaPersist);
+
 createApp(App).use(Antd).use(pinia).use(router).mount("#app");

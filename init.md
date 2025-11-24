@@ -19,3 +19,8 @@
 - npm run build	生产环境构建
 
 ## Vue库 ——— ant design Vue
+
+
+#端口
+
+> netstat -ano | findstr :5271
