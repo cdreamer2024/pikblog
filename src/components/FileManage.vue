@@ -25,6 +25,7 @@
         <!-- invoice -->
         <FileBrowser
           v-if="activeTab === 'invoice'"
+          :key="`invoice-${recordId}`"
           title="invoice"
           :base-url="`/${recordId}/invoice`"
           :upload-mode="UploadMode.invoice"
@@ -34,6 +35,7 @@
         <!-- receipt -->
         <FileBrowser
           v-if="activeTab === 'receipt'"
+          :key="`receipt-${recordId}`"
           title="receipt"
           :base-url="`/${recordId}/receipt`"
           :upload-mode="UploadMode.receipt"
@@ -43,6 +45,7 @@
         <!-- attach -->
         <FileBrowser
           v-if="activeTab === 'attach'"
+          :key="`attach-${recordId}`"
           title="attach"
           :base-url="`/${recordId}/attach`"
           :upload-mode="UploadMode.attach"
@@ -54,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { FileTextOutlined, FolderOpenOutlined } from "@ant-design/icons-vue";
 import FileBrowser from "./FileBrowser.vue";
 
@@ -75,6 +78,20 @@ const activeTab = ref<string>("invoice");
 const onTabSelect = (e: any) => {
   activeTab.value = e.key;
 };
+
+// 监听 recordId 变化，重置到默认标签
+watch(
+  () => props.recordId,
+  () => {
+    activeTab.value = "invoice";
+  }
+);
+
+// 组件挂载时确保数据加载
+onMounted(() => {
+  // 触发一次标签切换，确保初始数据加载
+  activeTab.value = "invoice";
+});
 </script>
 
 <style scoped>

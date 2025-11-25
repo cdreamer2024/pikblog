@@ -90,20 +90,20 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'name'">
           <div class="file-name-cell">
-            <FileOutlined v-if="!record.isDirectory" />
+            <FileOutlined v-if="!record.IsDirectory" />
             <FolderOutlined v-else />
             <a
-              :href="getFileUrl(record.name)"
+              :href="getFileUrl(record.Name)"
               target="_blank"
               class="file-link"
             >
-              {{ record.name }}
+              {{ record.Name }}
             </a>
           </div>
         </template>
 
         <template v-if="column.key === 'size'">
-          {{ formatFileSize(record.size) }}
+          {{ formatFileSize(record.Size) }}
         </template>
 
         <template v-if="column.key === 'operation'">
@@ -154,9 +154,9 @@ import {
 } from "@ant-design/icons-vue";
 
 interface FileItem {
-  name: string;
-  isDirectory: boolean;
-  size?: number;
+  Name: string;
+  IsDirectory: boolean;
+  Size?: number;
 }
 
 interface UploadFileItem {
@@ -204,12 +204,9 @@ const loadFileList = async () => {
       folder: props.title,
     });
 
-    console.log("🔍 后端返回数据:", res.data);
-
     // 根据实际数据结构调整
     if (res.data.IsSuccess) {
       fileList.value = res.data.Result.files || [];
-      console.log("✅ 加载到的文件列表:", fileList.value);
     } else {
       message.error(res.data.Msg || "加载文件列表失败");
     }
@@ -250,7 +247,6 @@ const handleUpload = async () => {
         formData.append("file", uploadFile.file);
         formData.append("folder", props.title);
         formData.append("recordId", String(props.recordId));
-        formData.append("mode", String(props.uploadMode));
 
         await request.post("/file/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
@@ -293,7 +289,7 @@ const getFileUrl = (fileName: string) => {
 };
 
 const downloadFile = async (file: FileItem) => {
-  if (file.isDirectory) {
+  if (file.IsDirectory) {
     message.info("文件夹不支持下载");
     return;
   }
@@ -302,9 +298,9 @@ const downloadFile = async (file: FileItem) => {
     const response = await request.post(
       "/file/download",
       {
-        recordId: props.recordId,
-        folder: props.title,
-        filename: file.name,
+        RecordId: props.recordId,
+        Folder: props.title,
+        FileName: file.Name,
       },
       { responseType: "blob" }
     );
@@ -312,7 +308,7 @@ const downloadFile = async (file: FileItem) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", file.name);
+    link.setAttribute("download", file.Name);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -328,9 +324,9 @@ const downloadFile = async (file: FileItem) => {
 const deleteFile = async (file: FileItem) => {
   try {
     await request.post("/file/delete", {
-      recordId: props.recordId,
-      folder: props.title,
-      filename: file.name,
+      RecordId: props.recordId,
+      Folder: props.title,
+      FileName: file.Name,
     });
 
     message.success("文件删除成功");
