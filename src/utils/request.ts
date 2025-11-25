@@ -2,7 +2,7 @@ import axios from "axios";
 import useUserStore from "@/store/index"; // 根据你的实际路径调整
 
 const request = axios.create({
-  baseURL: "/api",
+  baseURL: "http://10.140.2.11/evcr/api",
   timeout: 10000,
 });
 

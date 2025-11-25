@@ -12,4 +12,15 @@ module.exports = {
       },
     },
   },
+
+  publicPath:
+    process.env.NODE_ENV === "production"
+      ? "/Vueapp/" // 重要：与 IIS 中的应用程序别名一致
+      : "/",
+
+  // 构建输出目录
+  outputDir: "dist",
+
+  // 静态资源目录
+  assetsDir: "static",
 };

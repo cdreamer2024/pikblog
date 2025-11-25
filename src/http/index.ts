@@ -8,6 +8,7 @@ import router from "../router";
 
 const instance = axios.create({
   // timeout:3000
+  baseURL: "http://10.140.2.11/evcr",
   headers: {
     "Content-Type": "application/json",
   },
