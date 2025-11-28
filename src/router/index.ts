@@ -44,6 +44,59 @@ const routes: Array<RouteRecordRaw> = [
         name: "about",
         component: () => import("../views/AboutView.vue"),
       },
+      {
+        path: "personpage",
+        name: "personpage",
+        component: () => import("../views/index/PersonPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../views/MainView.vue"),
+    redirect: "/admin/user",
+    children: [
+      {
+        path: "user/add",
+        name: "useradd1",
+        component: () => import("../views/admin/user/AddView.vue"),
+      },
+      {
+        path: "user/setting",
+        name: "table1",
+        component: () => import("../views/admin/user/SettingView.vue"),
+      },
+      {
+        path: "user",
+        name: "test1",
+        component: () => import("../views/admin/user/UserView.vue"),
+      },
+      {
+        path: "home",
+        name: "home1",
+        component: () => import("../views/HomeView.vue"),
+      },
+      {
+        path: "about",
+        name: "about1",
+        component: () => import("../views/AboutView.vue"),
+      },
+      {
+        path: "personpage",
+        name: "personpage1",
+        component: () => import("../views/index/PersonPage.vue"),
+      },
+      {
+        path: "menu",
+        name: "about11",
+        component: () => import("../views/admin/menu/MenuView.vue"),
+      },
+      {
+        path: "role",
+        name: "personpage11",
+        component: () => import("../views/admin/role/RoleView.vue"),
+      },
     ],
   },
   // 404 页面路由

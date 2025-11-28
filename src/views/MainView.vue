@@ -93,7 +93,7 @@ const convertMenus = (menus: any[]): MenuProps["items"] => {
   if (!menus || !Array.isArray(menus)) return [];
 
   return menus.map((menu) => ({
-    key: `/main${menu.Path || menu.Id || menu.key}`,
+    key: `${menu.Index || menu.Id || menu.key}`,
     icon: () => h(IconCom, { icon: menu.Icon }),
     label: menu.Name || menu.label,
     children: menu.Children ? convertMenus(menu.Children) : undefined,
@@ -115,7 +115,7 @@ const menuItems = computed<MenuProps["items"]>(() => {
           label: "工作台",
         },
         {
-          key: "/main/test",
+          key: "/main/personpage",
           icon: () => h(MonitorOutlined),
           label: "个人信息",
         },

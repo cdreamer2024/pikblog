@@ -180,9 +180,11 @@ export const delMenu = (id: string) => {
 
 // --------------------- 角色模块 Start ---------------------
 interface RoleRequest {
-  id?: string;
-  roleName?: string;
+  Id?: string;
+  Name?: string;
   description?: string;
+  order?: number;
+  IsEnable?: boolean;
   // 根据实际API添加更多字段
 }
 
@@ -209,10 +211,17 @@ export const settingMenu = (rid: string, mids: string) => {
 
 // --------------------- 用户模块 Start ---------------------
 interface UserRequest {
-  id?: string;
-  username?: string;
-  nickname?: string;
-  email?: string;
+  Id?: string;
+  NickName?: string;
+  Name?: string;
+  UserType?: string;
+  Description?: string;
+  PageIndex?: number;
+  PageSize?: number;
+  IsEnable?: boolean;
+  Image?: string;
+  WisUid?: string;
+  WisUkey?: string;
   // 根据实际API添加更多字段
 }
 

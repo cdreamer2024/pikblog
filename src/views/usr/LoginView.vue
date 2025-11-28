@@ -182,7 +182,7 @@ const reset = () => {
 
 .form {
   width: 450px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(128, 193, 232, 0.9);
   padding: 40px 30px 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
