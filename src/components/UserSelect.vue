@@ -55,7 +55,7 @@ const handleChange = (_value: number, option: any) => {
 const fetchData = async () => {
   try {
     console.log("开始请求用户列表...");
-    const res = await request.post("/Wis/list");
+    const res = await request.post("/Wis/GetUserList");
     userList.value = res.data.Result || [];
   } catch (error) {
     console.error("获取用户列表失败:", error);

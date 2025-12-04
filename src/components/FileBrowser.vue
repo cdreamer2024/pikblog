@@ -187,19 +187,16 @@ const columns = [
   {
     title: "文件名",
     key: "name",
-    width: "60%", // 增加文件名列宽度
     ellipsis: true,
   },
   {
     title: "大小",
     key: "size",
-    width: "20%",
     align: "right" as const,
   },
   {
     title: "操作",
     key: "operation",
-    width: "20%", // 固定操作列宽度
     fixed: "right" as const, // 固定到右侧
   },
 ];

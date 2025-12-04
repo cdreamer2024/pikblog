@@ -22,27 +22,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "desktop",
         name: "desktop",
-        component: () => import("../views/TableView.vue"),
-      },
-      {
-        path: "table",
-        name: "table",
-        component: () => import("../views/TableView.vue"),
-      },
-      {
-        path: "test",
-        name: "test",
-        component: () => import("../views/TestView.vue"),
-      },
-      {
-        path: "home",
-        name: "home",
-        component: () => import("../views/HomeView.vue"),
-      },
-      {
-        path: "about",
-        name: "about",
-        component: () => import("../views/AboutView.vue"),
+        component: () => import("../views/index/DeskTop.vue"),
       },
       {
         path: "personpage",
@@ -58,43 +38,41 @@ const routes: Array<RouteRecordRaw> = [
     redirect: "/admin/user",
     children: [
       {
-        path: "user/add",
-        name: "useradd1",
-        component: () => import("../views/admin/user/AddView.vue"),
-      },
-      {
-        path: "user/setting",
-        name: "table1",
-        component: () => import("../views/admin/user/SettingView.vue"),
-      },
-      {
         path: "user",
-        name: "test1",
+        name: "userlist",
         component: () => import("../views/admin/user/UserView.vue"),
       },
       {
-        path: "home",
-        name: "home1",
-        component: () => import("../views/HomeView.vue"),
-      },
-      {
-        path: "about",
-        name: "about1",
-        component: () => import("../views/AboutView.vue"),
-      },
-      {
-        path: "personpage",
-        name: "personpage1",
-        component: () => import("../views/index/PersonPage.vue"),
-      },
-      {
         path: "menu",
-        name: "about11",
+        name: "menulist",
         component: () => import("../views/admin/menu/MenuView.vue"),
       },
       {
         path: "role",
-        name: "personpage11",
+        name: "rolelist",
+        component: () => import("../views/admin/role/RoleView.vue"),
+      },
+    ],
+  },
+  {
+    path: "/voucher",
+    name: "voucher",
+    component: () => import("../views/MainView.vue"),
+    redirect: "/voucher/",
+    children: [
+      {
+        path: "create",
+        name: "create",
+        component: () => import("@/views/voucher/VoucherCreate.vue"),
+      },
+      {
+        path: "done",
+        name: "done",
+        component: () => import("@/views/CreateView.vue"),
+      },
+      {
+        path: "todo",
+        name: "todo",
         component: () => import("../views/admin/role/RoleView.vue"),
       },
     ],

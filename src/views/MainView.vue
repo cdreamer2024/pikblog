@@ -110,7 +110,7 @@ const menuItems = computed<MenuProps["items"]>(() => {
       label: "我的主页",
       children: [
         {
-          key: "/main/table",
+          key: "/main/desktop",
           icon: () => h(WalletOutlined),
           label: "工作台",
         },
