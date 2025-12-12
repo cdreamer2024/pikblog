@@ -22,6 +22,7 @@ interface UserInfo {
   UserKey: number;
   UserID: string;
   OrgCode: string;
+  Office: string;
 }
 
 const selectedValue = ref();
@@ -33,13 +34,13 @@ const emit = defineEmits(["userSelected"]);
 const options = computed(() =>
   userList.value
     .filter((user) =>
-      `${user.UserKey}-${user.UserID}-${user.OrgCode}`
+      `${user.UserKey}-${user.UserID}-${user.OrgCode}-${user.Office}`
         .toLowerCase()
         .includes(searchText.value.toLowerCase())
     )
     .map((user) => ({
       value: user.UserKey,
-      label: `${user.UserKey}-${user.UserID}-${user.OrgCode}`,
+      label: `${user.UserKey}-${user.UserID}-${user.OrgCode}-${user.Office}`,
       data: user,
     }))
 );

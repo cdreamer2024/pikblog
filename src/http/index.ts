@@ -214,14 +214,17 @@ interface UserRequest {
   Id?: string;
   NickName?: string;
   Name?: string;
-  UserType?: string;
+  UserType?: number;
   Description?: string;
+  Password?: string;
   PageIndex?: number;
   PageSize?: number;
   IsEnable?: boolean;
   Image?: string;
   WisUid?: string;
   WisUkey?: string;
+  Office?: string;
+  OrgCode?: string;
   // 根据实际API添加更多字段
 }
 
@@ -262,4 +265,50 @@ export const editPersonInfo = (req: PersonInfoRequest) => {
 };
 // --------------------- 个人信息模块 End ---------------------
 
+// --------------------- FlowHandler ---------------------
+interface FlowHandleRequest {
+  Id?: string;
+  Office?: string;
+  DocType?: string;
+  IsEnable?: boolean;
+  PageIndex?: number;
+  PageSize?: number;
+  Flex1?: string;
+  Flex2?: string;
+  FlowStep?: string;
+  handler?: string;
+}
+export const getFlowHandlers = (obj: FlowHandleRequest) => {
+  return instance.post("/api/FlowHandler/getFlowHandlers", obj);
+};
+
+export const addFlowHandler = (req: FlowHandleRequest) => {
+  return instance.post("/api/FlowHandler/Add", req);
+};
+
+export const editFlowHandler = (req: FlowHandleRequest) => {
+  return instance.post("/api/FlowHandler/Edit", req);
+};
+
+export const delFlowHandler = (id: string) => {
+  return instance.get(`/api/FlowHandler/Del?id=${id}`);
+};
+
+// --------------------- Flow ---------------------
+export const GoOn = (req: string[]) => {
+  return instance.get("/api/Flow/GoOn", {
+    params: { req },
+    paramsSerializer: (p) =>
+      Object.entries(p)
+        .map(([k, v]) =>
+          Array.isArray(v)
+            ? v.map((item) => `${k}=${item}`).join("&")
+            : `${k}=${v}`
+        )
+        .join("&"),
+  });
+};
+export const getFlowDetails = (flowId: string) => {
+  return instance.get(`/api/Flow/FlowDetails?flowId=${flowId}`);
+};
 export default instance;

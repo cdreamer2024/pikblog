@@ -57,7 +57,8 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'operation'">
-          <a-button type="link" @click="handleDetail(record)">详情</a-button>
+          <a-button type="link" @click="openDrawer(record.Id)">详情</a-button>
+          <a-button type="link" @click="handleDetail(record)">文件</a-button>
           <a-button type="link" @click="preview(record)">预览</a-button>
         </template>
       </template>
@@ -74,15 +75,23 @@
     >
       <FileManager :record-id="currentRecordId" />
     </a-drawer>
+    <FlowHandlerDetails
+      :visible="showDrawer"
+      :flowId="currentFlowId"
+      @close="showDrawer = false"
+      @submit-success="handleSuccess"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, reactive, onMounted } from "vue";
-import { message } from "ant-design-vue";
+import { Modal, message } from "ant-design-vue";
 import type { TableColumnsType, TablePaginationConfig } from "ant-design-vue";
 import FileManager from "@/components/FileManage.vue";
+import FlowHandlerDetails from "@/components/FlowHandlerDetails.vue";
 import request from "@/utils/request";
+import { GoOn } from "@/http";
 
 // 类型定义
 interface DataItem {
@@ -146,7 +155,23 @@ const loading = ref(false);
 const tableData = ref<DataItem[]>([]);
 const selectedKeys = ref<string[]>([]);
 const detailVisible = ref(false);
+const showDrawer = ref(false);
+//详情
+const openDrawer = (flowId: string) => {
+  console.log("打开详情抽屉，flowId:", flowId);
+  console.log(
+    "对应记录:",
+    tableData.value.find((item) => item.Id === flowId)
+  );
+  currentFlowId.value = flowId;
+  showDrawer.value = true;
+};
+
+const handleSuccess = () => {
+  message.success("提交成功");
+};
 const currentRecordId = ref<string>("");
+const currentFlowId = ref<string>("");
 const total = ref(0);
 
 // 分页配置
@@ -212,15 +237,26 @@ const handleSearch = () => {
 };
 
 // 下一步
-const handleNextStep = () => {
+const handleNextStep = async () => {
   if (selectedKeys.value.length === 0) {
     message.warning("请至少选择一项");
     return;
   }
-  message.success(`选择了 ${selectedKeys.value.length} 项`);
+
+  try {
+    const result = await GoOn(selectedKeys.value);
+    if (result)
+      Modal.info({
+        title: "结果",
+        content: JSON.stringify(result, null, 2),
+        okText: "确认",
+      });
+  } catch {
+    message.error("请求出错");
+  }
 };
 
-// 详情
+// 文件
 const handleDetail = (record: DataItem) => {
   currentRecordId.value = record.GLTDocNmber;
   detailVisible.value = true;

@@ -7,31 +7,26 @@
     @ok="save"
   >
     <a-form :model="form" :label-col="{ span: 6 }" :rules="rules" ref="formRef">
-      <!-- 新增用户选择器 -->
       <a-form-item label="关联wis用户">
         <UserSelector @userSelected="handleUserSelected" />
-      </a-form-item>
-
-      <a-form-item label="名称" name="Name">
-        <a-input v-model:value="form.Name" />
-      </a-form-item>
-      <a-form-item label="昵称" name="NickName">
-        <a-input v-model:value="form.NickName" />
-      </a-form-item>
-      <a-form-item label="wisid" name="WisId">
-        <a-input v-model:value="form.WisUid" />
       </a-form-item>
       <a-form-item label="Office" name="Office">
         <a-input v-model:value="form.Office" />
       </a-form-item>
-      <a-form-item label="密码" name="Password">
-        <a-input v-model:value="form.Password" />
+      <a-form-item label="Type" name="Type">
+        <a-input v-model:value="form.DocType" />
       </a-form-item>
-      <a-form-item label="是否启用" name="IsEnable">
-        <a-switch v-model:checked="form.IsEnable" />
+      <a-form-item label="FlowStep" name="FlowStep">
+        <a-input v-model:value="form.FlowStep" />
       </a-form-item>
-      <a-form-item label="描述" name="Description">
-        <a-input v-model:value="form.Description" />
+      <a-form-item label="Flex1" name="Flex1">
+        <a-input v-model:value="form.Flex1" />
+      </a-form-item>
+      <a-form-item label="Flex2" name="Flex2">
+        <a-input v-model:value="form.Flex2" />
+      </a-form-item>
+      <a-form-item label="Handler" name="Handler">
+        <a-input v-model:value="form.handler" />
       </a-form-item>
     </a-form>
 
@@ -45,9 +40,8 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from "vue";
 import { message } from "ant-design-vue";
-import { addUser, editUser } from "../../../http/index";
-import UserSelector from "@/components/UserSelect.vue"; // 导入用户选择器组件
-
+import { addFlowHandler, editFlowHandler } from "@/http/index";
+import UserSelector from "@/components/UserSelect.vue";
 // 定义用户类型
 interface UserInfo {
   UserKey: number;
@@ -65,24 +59,14 @@ const dialogVisible = computed(() => props.isShow);
 const formRef = ref();
 const form = ref({
   Id: "",
-  Name: "",
-  NickName: "",
-  Password: "",
-  IsEnable: false,
-  Description: "",
-  UserType: 2,
-  Image: "1",
-  WisUid: "",
-  WisUkey: "",
   Office: "",
+  DocType: "",
+  IsEnable: true,
+  Flex1: "0",
+  Flex2: "0",
+  FlowStep: "",
+  handler: "",
 });
-
-// 处理用户选择 - 添加类型注解
-const handleUserSelected = (user: UserInfo) => {
-  form.value.WisUkey = user.UserKey.toString();
-  form.value.WisUid = user.UserID;
-  form.value.Office = user.Office;
-};
 
 watch(
   () => props.info,
@@ -91,25 +75,27 @@ watch(
   }
 );
 
+const handleUserSelected = (user: UserInfo) => {
+  form.value.handler = user.UserID.toString();
+  form.value.Office = user.Office.toString();
+};
+
 const rules = {
-  Name: [{ required: true, message: "请输入名称" }],
-  Password: [{ required: true, message: "请输入密码" }],
+  Office: [{ required: true, message: "请输入Office" }],
+  DocType: [{ required: true, message: "DocType" }],
 };
 
 const emits = defineEmits(["closeAdd", "success"]);
 
 const closeAdd = () => {
   formRef.value?.resetFields();
-  form.value.WisUid = ""; // 清空用户选择
-  form.value.WisUkey = "";
-  form.value.Office = "";
   emits("closeAdd");
 };
 
 const save = async () => {
   try {
     await formRef.value.validate();
-    const api = form.value.Id ? editUser : addUser;
+    const api = form.value.Id ? editFlowHandler : addFlowHandler;
     const res = await api(form.value);
     if (res) {
       message.success(form.value.Id ? "修改成功！" : "添加成功！");

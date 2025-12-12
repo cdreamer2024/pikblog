@@ -75,6 +75,25 @@ const routes: Array<RouteRecordRaw> = [
         name: "todo",
         component: () => import("../views/admin/role/RoleView.vue"),
       },
+      {
+        path: "details",
+        name: "details",
+        component: () => import("../views/voucher/FlowHandlerDetails.vue"),
+      },
+    ],
+  },
+  {
+    path: "/flowhandler",
+    name: "flowhandler",
+    component: () => import("../views/MainView.vue"),
+    redirect: "/flowhandler",
+    children: [
+      {
+        path: "flowhandlerlist",
+        name: "flowhandlerlist",
+        component: () =>
+          import("@/views/admin/flowhandler/FlowHandlerView.vue"),
+      },
     ],
   },
   // 404 页面路由
