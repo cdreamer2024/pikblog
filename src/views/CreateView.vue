@@ -19,6 +19,8 @@
           value-format="YYYY-MM-DD"
           style="width: 200px"
         />
+        DocNum:
+        <a-input v-model:value="docNumber" />
         Office:
         <a-select
           v-model:value="selectedOffice"
@@ -33,6 +35,14 @@
           placeholder="Type"
           style="width: 200px"
           :options="typeOptions"
+        />
+        Match:
+        <!-- 匹配选择框 -->
+        <a-select
+          v-model:value="selectedMatch"
+          placeholder="match"
+          style="width: 200px"
+          :options="matchOptions"
         />
 
         <!-- 查询按钮 -->
@@ -91,7 +101,7 @@ import type { TableColumnsType, TablePaginationConfig } from "ant-design-vue";
 import FileManager from "@/components/FileManage.vue";
 import FlowHandlerDetails from "@/components/FlowHandlerDetails.vue";
 import request from "@/utils/request";
-import { GoOn } from "@/http";
+import { GoOn, getOffice, getVoucherType } from "@/http";
 
 // 类型定义
 interface DataItem {
@@ -122,35 +132,20 @@ const columns: TableColumnsType = [
   { title: "DRBase", dataIndex: "DRBase", key: "DRBase" },
   { title: "CRBase", dataIndex: "CRBase", key: "CRBase" },
   { title: "BankFlag", dataIndex: "BankFlag", key: "BankFlag" },
-  { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
+  // { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
   { title: "MatchStatus", dataIndex: "MatchStatus", key: "MatchStatus" },
-  { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
+  // { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
   { title: "Flex1", dataIndex: "Flex1", key: "Flex1" },
   { title: "操作", key: "operation" },
 ];
-
-// 类型选项
-const typeOptions = ref([
-  { label: "全部", value: "" },
-  { label: "ACTRCT", value: "ACTRCT" },
-  { label: "REMIN", value: "REMIN" },
-  { label: "REMOUT", value: "REMOUT" },
-  { label: "JV", value: "JV" },
-]);
-
-const officeOptions = ref([
-  { label: "全部", value: "" },
-  { label: "SHA", value: "SHA" },
-  { label: "NGB", value: "NGB" },
-  { label: "XMN", value: "XMN" },
-  { label: "SZH", value: "SZH" },
-]);
 
 // 响应式数据
 const selectedFromDate = ref<string>("");
 const selectedToDate = ref<string>("");
 const selectedType = ref<string>("");
+const selectedMatch = ref<string>("");
 const selectedOffice = ref<string>("");
+const docNumber = ref<string>("");
 const loading = ref(false);
 const tableData = ref<DataItem[]>([]);
 const selectedKeys = ref<string[]>([]);
@@ -174,6 +169,19 @@ const currentRecordId = ref<string>("");
 const currentFlowId = ref<string>("");
 const total = ref(0);
 
+// 下拉选项数据
+const typeOptions = ref<{ label: string; value: string }[]>([
+  { label: "全部", value: "" },
+]);
+const officeOptions = ref<{ label: string; value: string }[]>([
+  { label: "全部", value: "" },
+]);
+const matchOptions = ref([
+  { label: "全部", value: "" },
+  { label: "已匹配", value: "1" },
+  { label: "未匹配", value: "0" },
+]);
+
 // 分页配置
 const pagination = reactive({
   current: 1,
@@ -183,6 +191,42 @@ const pagination = reactive({
   showTotal: (total: number) => `共 ${total} 条数据`,
 });
 
+// 加载下拉选项
+const loadOptions = async () => {
+  try {
+    // 获取类型选项
+    const typeRes = await getVoucherType();
+    console.log("typeRes:", typeRes);
+
+    if (Array.isArray(typeRes)) {
+      typeOptions.value = [
+        { label: "全部", value: "" },
+        ...typeRes.map((item: string) => ({
+          label: item,
+          value: item,
+        })),
+      ];
+    }
+
+    // 获取办公室选项
+    const officeRes = await getOffice();
+    console.log("officeRes:", officeRes);
+
+    if (Array.isArray(officeRes)) {
+      officeOptions.value = [
+        { label: "全部", value: "" },
+        ...officeRes.map((item: string) => ({
+          label: item,
+          value: item,
+        })),
+      ];
+    }
+  } catch (error) {
+    console.error("加载选项失败:", error);
+    // 静默失败，不显示错误信息
+  }
+};
+
 // 构建请求参数的函数
 const buildRequestParams = () => {
   return {
@@ -191,7 +235,8 @@ const buildRequestParams = () => {
     GL_Date_From: selectedFromDate.value || "",
     GL_Date_To: selectedToDate.value || "",
     Flow_Status: "",
-    Match_Status: "",
+    Match_Status: selectedMatch.value || "",
+    DocName: docNumber.value || "",
     User: "",
     PageIndex: pagination.current,
     PageSize: pagination.pageSize,
@@ -334,5 +379,6 @@ const rowSelection = computed(() => ({
 // 初始化
 onMounted(() => {
   loadvoucherList();
+  loadOptions();
 });
 </script>

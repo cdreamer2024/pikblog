@@ -311,4 +311,19 @@ export const GoOn = (req: string[]) => {
 export const getFlowDetails = (flowId: string) => {
   return instance.get(`/api/Flow/FlowDetails?flowId=${flowId}`);
 };
+
+export const GoOnSingle = (flowId: string, uComment: string) => {
+  return instance.get(
+    `/api/Flow/GoOnSingle?flowId=${flowId}&uComment=${uComment}`
+  );
+};
+
+// --------------------- ComInfo ---------------------
+export const getOffice = () => {
+  return instance.get(`/api/ComInfo/Office?mode=0`);
+};
+
+export const getVoucherType = () => {
+  return instance.get(`/api/ComInfo/VoucherType?mode=0`);
+};
 export default instance;

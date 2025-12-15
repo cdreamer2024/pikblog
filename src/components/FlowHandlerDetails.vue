@@ -66,7 +66,7 @@
 import { ref, reactive, watch, computed } from "vue";
 import { message, Modal } from "ant-design-vue";
 import dayjs from "dayjs";
-import { getFlowDetails } from "@/http";
+import { getFlowDetails, GoOnSingle } from "@/http";
 
 const props = defineProps({
   flowId: String,
@@ -151,23 +151,14 @@ const handleSubmit = () => {
       submitting.value = true;
 
       try {
-        const res = await fetch("/api/flow/submitSingle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            flowId: props.flowId,
-            comment: formState.comment,
-          }),
-        });
-
-        const data = await res.json();
-        if (data.IsSuccess) {
-          message.success("提交成功");
+        const res = await GoOnSingle(props.flowId, formState.comment);
+        if (res) {
+          message.success(JSON.stringify(res, null, 2));
           formRef.value?.resetFields();
           emit("submit-success");
-          loadFlowData();
+          closeDrawer();
         } else {
-          message.error(data.Msg || "提交失败");
+          message.error("提交失败");
         }
       } catch {
         message.error("提交失败");
