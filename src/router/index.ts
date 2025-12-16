@@ -63,17 +63,17 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "create",
         name: "create",
-        component: () => import("@/views/voucher/VoucherCreate.vue"),
+        component: () => import("@/views/voucher/CreateView.vue"),
       },
       {
         path: "done",
         name: "done",
-        component: () => import("@/views/CreateView.vue"),
+        component: () => import("@/views/voucher/HandledView.vue"),
       },
       {
         path: "todo",
         name: "todo",
-        component: () => import("../views/admin/role/RoleView.vue"),
+        component: () => import("@/views/voucher/WaitHandleView.vue"),
       },
       {
         path: "details",

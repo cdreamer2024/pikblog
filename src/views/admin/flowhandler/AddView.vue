@@ -7,17 +7,23 @@
     @ok="save"
   >
     <a-form :model="form" :label-col="{ span: 6 }" :rules="rules" ref="formRef">
-      <a-form-item label="关联wis用户">
+      <a-form-item label="关联wis用户" name="WisInfo">
         <UserSelector @userSelected="handleUserSelected" />
       </a-form-item>
       <a-form-item label="Office" name="Office">
         <a-input v-model:value="form.Office" />
       </a-form-item>
-      <a-form-item label="Type" name="Type">
-        <a-input v-model:value="form.DocType" />
+      <a-form-item label="Type" name="DocType">
+        <VoucherTypeSelect
+          v-model:value="form.DocType"
+          placeholder="请选择Type"
+        />
       </a-form-item>
       <a-form-item label="FlowStep" name="FlowStep">
-        <a-input v-model:value="form.FlowStep" />
+        <FlowStepSelect
+          v-model:value="form.FlowStep"
+          placeholder="请选择step"
+        />
       </a-form-item>
       <a-form-item label="Flex1" name="Flex1">
         <a-input v-model:value="form.Flex1" />
@@ -42,6 +48,8 @@ import { ref, computed, watch } from "vue";
 import { message } from "ant-design-vue";
 import { addFlowHandler, editFlowHandler } from "@/http/index";
 import UserSelector from "@/components/UserSelect.vue";
+import VoucherTypeSelect from "@/components/VoucherTypeSelect.vue";
+import FlowStepSelect from "@/components/FlowStepSelect.vue";
 // 定义用户类型
 interface UserInfo {
   UserKey: number;
@@ -54,7 +62,6 @@ const props = defineProps({
   isShow: Boolean,
   info: Object,
 });
-
 const dialogVisible = computed(() => props.isShow);
 const formRef = ref();
 const form = ref({
@@ -81,8 +88,8 @@ const handleUserSelected = (user: UserInfo) => {
 };
 
 const rules = {
-  Office: [{ required: true, message: "请输入Office" }],
-  DocType: [{ required: true, message: "DocType" }],
+  DocType: [{ required: true, message: "请输入DocType" }],
+  FlowStep: [{ required: true, message: "请输入Flowstep" }],
 };
 
 const emits = defineEmits(["closeAdd", "success"]);
