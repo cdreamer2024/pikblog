@@ -1,7 +1,7 @@
 <template>
   <a-drawer
     v-model:open="internalVisible"
-    title="流程处理记录"
+    :title="`流程处理记录-${props.doc_name}`"
     width="600"
     placement="right"
     :body-style="{ padding: '16px' }"
@@ -40,6 +40,7 @@ import { getFlowDetails, GoOnSingle } from "@/http";
 
 const props = defineProps({
   flowId: String,
+  doc_name: String,
   showSubmit: { type: Boolean, default: true },
   visible: Boolean,
 });

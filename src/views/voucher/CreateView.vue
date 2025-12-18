@@ -132,9 +132,9 @@ const columns: TableColumnsType = [
   { title: "DRBase", dataIndex: "DRBase", key: "DRBase" },
   { title: "CRBase", dataIndex: "CRBase", key: "CRBase" },
   { title: "BankFlag", dataIndex: "BankFlag", key: "BankFlag" },
-  // { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
+  { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
   { title: "MatchStatus", dataIndex: "MatchStatus", key: "MatchStatus" },
-  // { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
+  { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
   { title: "Flex1", dataIndex: "Flex1", key: "Flex1" },
   { title: "操作", key: "operation" },
 ];

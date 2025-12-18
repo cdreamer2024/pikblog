@@ -1,7 +1,7 @@
 <template>
   <a-drawer
     v-model:open="internalVisible"
-    title="流程处理记录"
+    :title="`流程处理记录-${props.doc_name}`"
     width="600"
     placement="right"
     :body-style="{ padding: '16px' }"
@@ -72,6 +72,7 @@ const props = defineProps({
   flowId: String,
   showSubmit: { type: Boolean, default: true },
   visible: Boolean,
+  doc_name: String,
 });
 
 const emit = defineEmits(["close", "submit-success"]);

@@ -67,7 +67,11 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'operation'">
-          <a-button type="link" @click="openDrawer(record.Id)">详情</a-button>
+          <a-button
+            type="link"
+            @click="openDrawer(record.Id, record.GLTDocNmber)"
+            >详情</a-button
+          >
           <!-- <a-button type="link" @click="handleDetail(record)">文件</a-button> -->
           <a-button type="link" @click="preview(record)">预览</a-button>
         </template>
@@ -88,6 +92,7 @@
     <FlowHandlerDetails
       :visible="showDrawer"
       :flowId="currentFlowId"
+      :doc_name="currentDocNum"
       @close="showDrawer = false"
       @submit-success="handleSuccess"
     />
@@ -132,9 +137,9 @@ const columns: TableColumnsType = [
   { title: "DRBase", dataIndex: "DRBase", key: "DRBase" },
   { title: "CRBase", dataIndex: "CRBase", key: "CRBase" },
   { title: "BankFlag", dataIndex: "BankFlag", key: "BankFlag" },
-  // { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
+  { title: "FlowStatus", dataIndex: "FlowStatus", key: "FlowStatus" },
   { title: "MatchStatus", dataIndex: "MatchStatus", key: "MatchStatus" },
-  // { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
+  { title: "CurruntUser", dataIndex: "CurruntUser", key: "CurruntUser" },
   { title: "Flex1", dataIndex: "Flex1", key: "Flex1" },
   { title: "操作", key: "operation" },
 ];
@@ -152,13 +157,14 @@ const selectedKeys = ref<string[]>([]);
 const detailVisible = ref(false);
 const showDrawer = ref(false);
 //详情
-const openDrawer = (flowId: string) => {
+const openDrawer = (flowId: string, docNum: string) => {
   console.log("打开详情抽屉，flowId:", flowId);
   console.log(
     "对应记录:",
     tableData.value.find((item) => item.Id === flowId)
   );
   currentFlowId.value = flowId;
+  currentDocNum.value = docNum;
   showDrawer.value = true;
 };
 
@@ -168,6 +174,7 @@ const handleSuccess = () => {
 };
 const currentRecordId = ref<string>("");
 const currentFlowId = ref<string>("");
+const currentDocNum = ref<string>("");
 const total = ref(0);
 
 // 下拉选项数据
