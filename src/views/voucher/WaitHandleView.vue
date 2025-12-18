@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive, onMounted } from "vue";
+import { ref, computed, reactive, onMounted, h } from "vue";
 import { Modal, message } from "ant-design-vue";
 import type { TableColumnsType, TablePaginationConfig } from "ant-design-vue";
 import FileManager from "@/components/FileManage.vue";
@@ -298,12 +298,107 @@ const handleNextStep = async () => {
 
   try {
     const result = await GoOn(selectedKeys.value);
-    if (result)
+    if (result) {
+      const content = h(
+        "div",
+        {
+          style: {
+            maxHeight: "400px",
+            overflow: "auto",
+            padding: "4px",
+          },
+        },
+        [
+          h(
+            "div",
+            {
+              style: {
+                marginBottom: "16px",
+                color: "#666",
+                fontSize: "14px",
+              },
+            },
+            `共处理 ${Object.keys(result).length} 条记录`
+          ),
+
+          // 使用简单的 div 列表显示每条记录的 Info 信息
+          ...Object.values(result).map((item, index) =>
+            h(
+              "div",
+              {
+                key: index,
+                style: {
+                  padding: "12px 16px",
+                  marginBottom: "8px",
+                  backgroundColor: index % 2 === 0 ? "#fafafa" : "#ffffff",
+                  border: "1px solid #f0f0f0",
+                  borderRadius: "6px",
+                  fontSize: "14px",
+                  lineHeight: "1.5",
+                },
+              },
+              [
+                h(
+                  "div",
+                  {
+                    style: {
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "4px",
+                    },
+                  },
+                  [
+                    h(
+                      "span",
+                      {
+                        style: {
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "20px",
+                          height: "20px",
+                          backgroundColor: "#1890ff",
+                          color: "white",
+                          borderRadius: "50%",
+                          fontSize: "12px",
+                          marginRight: "10px",
+                          flexShrink: 0,
+                        },
+                      },
+                      index + 1
+                    ),
+                    h(
+                      "span",
+                      {
+                        style: { fontWeight: 500 },
+                      },
+                      `记录 ${index + 1}`
+                    ),
+                  ]
+                ),
+                h(
+                  "div",
+                  {
+                    style: {
+                      paddingLeft: "30px",
+                      color: "#333",
+                    },
+                  },
+                  item.Info
+                ),
+              ]
+            )
+          ),
+        ]
+      );
+
       Modal.info({
-        title: "结果",
-        content: JSON.stringify(result, null, 2),
+        title: "处理结果",
+        width: 700,
+        content,
         okText: "确认",
       });
+    }
   } catch {
     message.error("请求出错");
   }

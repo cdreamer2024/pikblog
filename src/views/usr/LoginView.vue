@@ -143,7 +143,7 @@ const onSubmit = async () => {
       }
 
       // 跳转到首页或其他受保护的路由
-      router.push("/main/desktop");
+      router.push("/voucher/todo");
     } else {
       message.error("用户名或密码错误");
     }

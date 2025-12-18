@@ -67,7 +67,11 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'operation'">
-          <a-button type="link" @click="openDrawer(record.Id)">详情</a-button>
+          <a-button
+            type="link"
+            @click="openDrawer(record.Id, record.GLTDocNmber)"
+            >详情</a-button
+          >
           <a-button type="link" @click="handleDetail(record)">文件</a-button>
           <a-button type="link" @click="preview(record)">预览</a-button>
         </template>
@@ -88,6 +92,7 @@
     <FlowHandlerDetails
       :visible="showDrawer"
       :flowId="currentFlowId"
+      :doc_name="currentDocNum"
       @close="showDrawer = false"
       @submit-success="handleSuccess"
     />
@@ -95,8 +100,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive, onMounted } from "vue";
-import { Modal, message } from "ant-design-vue";
+import { ref, computed, reactive, onMounted, h } from "vue";
+import { Modal, message, List } from "ant-design-vue";
 import type { TableColumnsType, TablePaginationConfig } from "ant-design-vue";
 import FileManager from "@/components/FileManage.vue";
 import FlowHandlerDetails from "@/components/FlowHandlerDetails.vue";
@@ -151,14 +156,16 @@ const tableData = ref<DataItem[]>([]);
 const selectedKeys = ref<string[]>([]);
 const detailVisible = ref(false);
 const showDrawer = ref(false);
+const currentDocNum = ref<string>("");
 //详情
-const openDrawer = (flowId: string) => {
+const openDrawer = (flowId: string, docNum: string) => {
   console.log("打开详情抽屉，flowId:", flowId);
   console.log(
     "对应记录:",
     tableData.value.find((item) => item.Id === flowId)
   );
   currentFlowId.value = flowId;
+  currentDocNum.value = docNum;
   showDrawer.value = true;
 };
 
@@ -281,8 +288,7 @@ const handleSearch = () => {
   pagination.current = 1;
   loadvoucherList();
 };
-
-// 下一步
+// next step
 const handleNextStep = async () => {
   if (selectedKeys.value.length === 0) {
     message.warning("请至少选择一项");
@@ -291,12 +297,54 @@ const handleNextStep = async () => {
 
   try {
     const result = await GoOn(selectedKeys.value);
-    if (result)
+    if (result) {
+      // 提取所有 Info 信息
+      const infoList = Object.values(result).map((item) => item.Info);
+
       Modal.info({
-        title: "结果",
-        content: JSON.stringify(result, null, 2),
+        title: "处理结果",
+        width: 600,
+        content: h("div", { style: { maxHeight: "400px", overflow: "auto" } }, [
+          h(
+            "div",
+            { style: { marginBottom: "16px", color: "#666" } },
+            `共处理 ${Object.keys(result).length} 条记录`
+          ),
+          h(List, {
+            dataSource: infoList,
+            renderItem: ({ item, index }) =>
+              h(List.Item, [
+                h(
+                  "div",
+                  { style: { display: "flex", alignItems: "flex-start" } },
+                  [
+                    h(
+                      "div",
+                      {
+                        style: {
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "50%",
+                          background: "#1890ff",
+                          color: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginRight: "12px",
+                          flexShrink: 0,
+                        },
+                      },
+                      index + 1
+                    ),
+                    h("div", { style: { flex: 1 } }, item),
+                  ]
+                ),
+              ]),
+          }),
+        ]),
         okText: "确认",
       });
+    }
   } catch {
     message.error("请求出错");
   }

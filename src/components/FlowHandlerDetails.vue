@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from "vue";
+import { ref, reactive, watch, computed, h } from "vue";
 import { message, Modal } from "ant-design-vue";
 import dayjs from "dayjs";
 import { getFlowDetails, GoOnSingle } from "@/http";
@@ -154,10 +154,80 @@ const handleSubmit = () => {
       try {
         const res = await GoOnSingle(props.flowId, formState.comment);
         if (res) {
-          message.success(JSON.stringify(res, null, 2));
-          formRef.value?.resetFields();
-          emit("submit-success");
-          closeDrawer();
+          // 获取第一个（也是唯一一个）数据项
+          const firstKey = Object.keys(res)[0];
+          const item = res[firstKey];
+
+          Modal.success({
+            title: "提交成功",
+            width: 500,
+            content: h("div", [
+              h(
+                "div",
+                {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "12px",
+                    color: item.isSuccess ? "#52c41a" : "#ff4d4f",
+                  },
+                },
+                [
+                  h(
+                    "span",
+                    {
+                      style: {
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "20px",
+                        height: "20px",
+                        backgroundColor: item.isSuccess ? "#52c41a" : "#ff4d4f",
+                        color: "white",
+                        borderRadius: "50%",
+                        fontSize: "12px",
+                        marginRight: "8px",
+                      },
+                    },
+                    "✓"
+                  ),
+                  h(
+                    "span",
+                    {
+                      style: {
+                        fontWeight: 500,
+                        fontSize: "16px",
+                      },
+                    },
+                    item.isSuccess ? "处理成功" : "处理失败"
+                  ),
+                ]
+              ),
+
+              // Info 信息
+              h(
+                "div",
+                {
+                  style: {
+                    background: "#f8f9fa",
+                    padding: "16px",
+                    borderRadius: "6px",
+                    border: "1px solid #e8e8e8",
+                    fontSize: "14px",
+                    lineHeight: "1.6",
+                    color: "#333",
+                  },
+                },
+                item.Info
+              ),
+            ]),
+            okText: "确认",
+            onOk: () => {
+              formRef.value?.resetFields();
+              emit("submit-success");
+              closeDrawer();
+            },
+          });
         } else {
           message.error("提交失败");
         }
