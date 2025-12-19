@@ -308,6 +308,31 @@ export const GoOn = (req: string[]) => {
         .join("&"),
   });
 };
+
+export const GoBack = (flowId: string[], uReason: string) => {
+  return instance.get(`/api/Flow/GoBack`, {
+    params: {
+      flowId: flowId,
+      uReason: uReason,
+    },
+    paramsSerializer: (params) => {
+      const parts: string[] = [];
+
+      for (const [key, value] of Object.entries(params)) {
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            parts.push(`${key}=${encodeURIComponent(item)}`);
+          }
+        } else {
+          parts.push(`${key}=${encodeURIComponent(value as string)}`);
+        }
+      }
+
+      return parts.join("&");
+    },
+  });
+};
+
 export const getFlowDetails = (flowId: string) => {
   return instance.get(`/api/Flow/FlowDetails?flowId=${flowId}`);
 };

@@ -32,7 +32,6 @@
         <a-input-password
           v-model:value="formState.password"
           placeholder="请输入密码"
-          @keyup.enter="onSubmit"
         />
       </a-form-item>
 

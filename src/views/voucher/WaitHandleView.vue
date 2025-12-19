@@ -50,6 +50,8 @@
 
         <!-- 提交到下一级按钮 -->
         <a-button type="primary" @click="handleNextStep">提交到下一级</a-button>
+
+        <a-button type="primary" @click="handleBackStep">退回</a-button>
       </a-space>
     </div>
 
@@ -101,12 +103,12 @@
 
 <script lang="ts" setup>
 import { ref, computed, reactive, onMounted, h } from "vue";
-import { Modal, message } from "ant-design-vue";
+import { Modal, message, Input } from "ant-design-vue";
 import type { TableColumnsType, TablePaginationConfig } from "ant-design-vue";
 import FileManager from "@/components/FileManage.vue";
 import FlowHandlerDetails from "@/components/FlowHandlerDetails.vue";
 import request from "@/utils/request";
-import { GoOn, getOffice, getVoucherType } from "@/http";
+import { GoOn, GoBack, getOffice, getVoucherType } from "@/http";
 
 // 类型定义
 interface DataItem {
@@ -287,6 +289,95 @@ const handleSearch = () => {
   // 重置到第一页
   pagination.current = 1;
   loadvoucherList();
+};
+
+// go back
+const handleBackStep = () => {
+  if (!selectedKeys.value.length) {
+    message.warning("请至少选择一项");
+    return;
+  }
+
+  Modal.confirm({
+    title: "退回原因",
+    content: h("div", [
+      h("p", { style: "margin-bottom: 8px; color: #666;" }, "请输入退回原因:"),
+      h(Input.TextArea, {
+        placeholder: "请输入退回原因，最多500字",
+        rows: 4,
+        maxlength: 500,
+        showCount: true,
+        id: "reasonInput",
+        autofocus: true,
+      }),
+    ]),
+    okText: "确认退回",
+    cancelText: "取消",
+    async onOk() {
+      const textarea = document.querySelector(
+        "#reasonInput"
+      ) as HTMLTextAreaElement;
+      const reason = textarea?.value?.trim() || "";
+
+      if (!reason) {
+        message.warning("请输入退回原因");
+        // 阻止对话框关闭
+        return false;
+      }
+
+      try {
+        loading.value = true;
+
+        const response = await GoBack(selectedKeys.value, reason);
+
+        // 显示结果
+        const resultList = Object.values(response);
+
+        // 关闭当前对话框
+        Modal.destroyAll();
+
+        Modal.success({
+          title: "退回成功",
+          content: h("div", [
+            h("p", { style: "margin-bottom: 12px;" }, "以下单据已成功退回:"),
+            h(
+              "div",
+              {
+                style:
+                  "max-height: 200px; overflow-y: auto; border: 1px solid #e8e8e8; padding: 12px; border-radius: 4px; background: #fafafa;",
+              },
+              resultList.map((item, index) =>
+                h(
+                  "div",
+                  {
+                    style: "padding: 6px 0; border-bottom: 1px dashed #e8e8e8;",
+                    key: index,
+                  },
+                  `• ${item}`
+                )
+              )
+            ),
+          ]),
+          onOk() {
+            loadvoucherList();
+            selectedKeys.value = [];
+          },
+        });
+      } catch (error: any) {
+        console.error("退回操作失败:", error);
+        message.error(error.message || "退回操作失败");
+      } finally {
+        loading.value = false;
+      }
+    },
+    onCancel() {
+      // 可选：清空输入内容
+      const textarea = document.querySelector(
+        "#reasonInput"
+      ) as HTMLTextAreaElement;
+      if (textarea) textarea.value = "";
+    },
+  });
 };
 
 // 下一步
