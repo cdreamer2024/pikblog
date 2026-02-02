@@ -11,7 +11,7 @@
             <a-input-password v-model:value="form.Password" />
           </a-form-item>
 
-          <a-form-item label="头像">
+          <a-form-item label="签章">
             <a-upload
               list-type="picture-card"
               :show-upload-list="false"
@@ -81,9 +81,9 @@ const beforeAvatarUpload = (file: File) => {
     return false;
   }
 
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 5;
   if (!isLt2M) {
-    message.error("图片大小不能超过 2MB!");
+    message.error("图片大小不能超过 5MB!");
     return false;
   }
 

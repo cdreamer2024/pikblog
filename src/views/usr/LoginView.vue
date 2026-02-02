@@ -33,6 +33,7 @@
           v-model:value="formState.password"
           placeholder="请输入密码"
         />
+        <div class="form-tip">使用"cn"域账户登录时请在用户名前加"cn\"</div>
       </a-form-item>
 
       <a-form-item name="remember" :wrapper-col="{ offset: 6, span: 16 }">
@@ -201,6 +202,13 @@ const reset = () => {
   .reset-btn {
     width: 80px;
   }
+}
+
+.form-tip {
+  color: #139231;
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.5;
 }
 
 // 响应式设计
