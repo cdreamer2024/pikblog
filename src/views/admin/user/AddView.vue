@@ -9,7 +9,7 @@
     <a-form :model="form" :label-col="{ span: 6 }" :rules="rules" ref="formRef">
       <!-- 新增用户选择器 -->
       <a-form-item label="关联wis用户">
-        <UserSelector @userSelected="handleUserSelected" />
+        <UserDetailSelector @userSelected="handleUserSelected" />
       </a-form-item>
 
       <a-form-item label="名称" name="Name">
@@ -30,7 +30,7 @@
       <a-form-item label="是否启用" name="IsEnable">
         <a-switch v-model:checked="form.IsEnable" />
       </a-form-item>
-      <a-form-item label="描述" name="Description">
+      <a-form-item label="email" name="Description">
         <a-input v-model:value="form.Description" />
       </a-form-item>
     </a-form>
@@ -45,15 +45,18 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from "vue";
 import { message } from "ant-design-vue";
-import { addUser, editUser } from "../../../http/index";
-import UserSelector from "@/components/UserSelect.vue"; // 导入用户选择器组件
+import { addUser, editUser } from "@/http/index";
+import UserDetailSelector from "@/components/UserDetailSelect.vue"; // 导入用户选择器组件
 
 // 定义用户类型
 interface UserInfo {
   UserKey: number;
   UserID: string;
+  UserADID: string;
+  UserEmailAddr: string;
   OrgCode: string;
   Office: string;
+  OuTitleKey: number;
 }
 
 const props = defineProps({
@@ -75,13 +78,20 @@ const form = ref({
   WisUid: "",
   WisUkey: "",
   Office: "",
+  Flex1: "",
+  Flex2: "",
 });
 
 // 处理用户选择 - 添加类型注解
 const handleUserSelected = (user: UserInfo) => {
   form.value.WisUkey = user.UserKey.toString();
+  form.value.Name = user.UserADID;
+  form.value.NickName = user.UserADID;
+  form.value.Description = user.UserEmailAddr;
   form.value.WisUid = user.UserID;
   form.value.Office = user.Office;
+  form.value.Flex1 = user.OuTitleKey.toString();
+  form.value.Flex2 = user.OrgCode;
 };
 
 watch(

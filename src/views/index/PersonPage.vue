@@ -7,9 +7,9 @@
             <a-input v-model:value="form.NickName" />
           </a-form-item>
 
-          <a-form-item label="密码">
+          <!-- <a-form-item label="密码">
             <a-input-password v-model:value="form.Password" />
-          </a-form-item>
+          </a-form-item> -->
 
           <a-form-item label="签章">
             <a-upload
@@ -37,7 +37,7 @@
 
           <a-form-item>
             <a-button type="primary" @click="onSubmit">保存</a-button>
-            <a-button style="margin-left: 8px">取消</a-button>
+            <!-- <a-button style="margin-left: 8px">取消</a-button> -->
           </a-form-item>
         </a-form>
       </a-card>
@@ -45,9 +45,9 @@
 
     <a-col :span="12">
       <a-card title="注意事项">
-        <p style="color: #ff4d4f">请谨慎修改密码</p>
+        <p style="color: #ff4d4f">XXXXX</p>
         <p>xxxxxxxxxx</p>
-        <p>xxxxxxxxxxxx</p>
+        <p>xxxxxxxxxx</p>
         <p>......</p>
       </a-card>
     </a-col>
@@ -75,15 +75,17 @@ const fromAction = ref(
 );
 
 const beforeAvatarUpload = (file: File) => {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  // const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  const isJpgOrPng =
+    file.type === "image/jpeg" && file.name.toLowerCase().endsWith(".jpg");
   if (!isJpgOrPng) {
-    message.error("只能上传 JPG/PNG 格式的图片!");
+    message.error("只能上传 .JPG 格式的图片!");
     return false;
   }
 
-  const isLt2M = file.size / 1024 / 1024 < 5;
+  const isLt2M = file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error("图片大小不能超过 5MB!");
+    message.error("图片大小不能超过 2MB!");
     return false;
   }
 

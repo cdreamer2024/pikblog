@@ -132,10 +132,10 @@
       description="暂无文件"
       style="margin-top: 40px"
     >
-      <a-button type="primary" @click="beforeUpload">
+      <!-- <a-button type="primary" @click="beforeUpload">
         <UploadOutlined />
         上传文件
-      </a-button>
+      </a-button> -->
     </a-empty>
   </div>
 </template>

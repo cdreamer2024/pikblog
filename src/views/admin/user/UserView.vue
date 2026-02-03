@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { message, Modal } from "ant-design-vue";
-import { delUser, getUsers } from "../../../http";
+import { delUser, getUsers } from "@/http";
 import add from "./AddView.vue";
 import setting from "./SettingView.vue";
 

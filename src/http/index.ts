@@ -225,6 +225,8 @@ interface UserRequest {
   WisUkey?: string;
   Office?: string;
   OrgCode?: string;
+  Flex1?: string;
+  Flex2?: string;
   // 根据实际API添加更多字段
 }
 
