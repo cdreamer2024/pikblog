@@ -80,6 +80,24 @@ const routes: Array<RouteRecordRaw> = [
         name: "details",
         component: () => import("../views/voucher/FlowHandlerDetails.vue"),
       },
+      {
+        path: "voucherquery",
+        name: "voucherquery",
+        component: () => import("../views/voucher/VoucherQuery.vue"),
+      },
+    ],
+  },
+  {
+    path: "/vcrQuery",
+    name: "vcrQuery",
+    component: () => import("../views/MainView.vue"),
+    redirect: "/vcrQuery/",
+    children: [
+      {
+        path: "voucherquery",
+        name: "voucherquery",
+        component: () => import("../views/voucher/VoucherQuery.vue"),
+      },
     ],
   },
   {

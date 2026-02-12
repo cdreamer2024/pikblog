@@ -46,7 +46,7 @@
     <a-col :span="12">
       <a-card title="注意事项">
         <p style="color: #ff4d4f">XXXXX</p>
-        <p>xxxxxxxxxx</p>
+        <p>修改完用户名或签章后需点击保存才能生效！！</p>
         <p>xxxxxxxxxx</p>
         <p>......</p>
       </a-card>

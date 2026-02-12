@@ -350,6 +350,10 @@ export const getOffice = () => {
   return instance.get(`/api/ComInfo/Office?mode=0`);
 };
 
+export const getUsrOffice = () => {
+  return instance.get(`/api/ComInfo/Office?mode=1`);
+};
+
 export const getVoucherType = () => {
   return instance.get(`/api/ComInfo/VoucherType?mode=0`);
 };
